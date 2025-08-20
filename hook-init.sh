@@ -313,6 +313,17 @@ create_install_directory() {
     
     if [[ $? -eq 0 ]]; then
         print_success "安装目录创建成功"
+        
+        # 设置目录权限
+        print_info "设置目录权限..."
+        chmod 755 "$INSTALL_DIR"
+        chown root:root "$INSTALL_DIR"
+        
+        if [[ $? -eq 0 ]]; then
+            print_success "目录权限设置成功"
+        else
+            print_warning "目录权限设置失败，但继续执行..."
+        fi
     else
         print_error "安装目录创建失败"
         exit 1
