@@ -351,14 +351,18 @@ clone_hook_repository() {
             mkdir -p docker
         fi
         
-        # 移动mineadmin.sh到docker目录
-        print_info "移动mineadmin.sh到docker目录..."
-        mv mineadmin.sh docker/
+        # 移动所有文件到docker目录（除了.git目录）
+        print_info "移动所有文件到docker目录..."
+        for item in *; do
+            if [[ "$item" != "docker" && "$item" != ".git" ]]; then
+                mv "$item" docker/
+            fi
+        done
         
         if [[ $? -eq 0 ]]; then
-            print_success "mineadmin.sh已移动到docker目录"
+            print_success "所有文件已移动到docker目录"
         else
-            print_error "移动mineadmin.sh失败"
+            print_error "移动文件失败"
             exit 1
         fi
     else
