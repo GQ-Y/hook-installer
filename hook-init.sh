@@ -17,8 +17,8 @@ NC='\033[0m' # No Color
 
 # 仓库信息
 HOOK_REPO_URL="https://github.com/GQ-Y/hook-mine-mangen.git"
-HOOK_REPO_NAME="hook-mine-mangen"
-INSTALL_DIR="/opt/hook-mineadmin"
+HOOK_REPO_NAME="docker"
+INSTALL_DIR="/opt/docker"
 
 # 打印函数
 print_info() {
@@ -338,7 +338,7 @@ clone_hook_repository() {
     
     print_info "从 $HOOK_REPO_URL 克隆仓库..."
     
-    if git clone "$HOOK_REPO_URL" "$HOOK_REPO_NAME" 2>/dev/null; then
+    if git clone "$HOOK_REPO_URL" "$HOOK_REPO_NAME"  2>/dev/null; then
         print_success "Hook仓库克隆成功"
     else
         print_error "Hook仓库克隆失败"
@@ -355,27 +355,6 @@ clone_hook_repository() {
     # 检查mineadmin.sh脚本是否存在
     if [[ -f "mineadmin.sh" ]]; then
         print_success "找到mineadmin.sh脚本"
-        
-        # 创建docker目录（如果不存在）
-        if [[ ! -d "docker" ]]; then
-            print_info "创建docker目录..."
-            mkdir -p docker
-        fi
-        
-        # 移动所有文件到docker目录（除了.git目录）
-        print_info "移动所有文件到docker目录..."
-        for item in *; do
-            if [[ "$item" != "docker" && "$item" != ".git" ]]; then
-                mv "$item" docker/
-            fi
-        done
-        
-        if [[ $? -eq 0 ]]; then
-            print_success "所有文件已移动到docker目录"
-        else
-            print_error "移动文件失败"
-            exit 1
-        fi
     else
         print_error "未找到mineadmin.sh脚本"
         echo -e "${YELLOW}请检查仓库结构是否正确${NC}"
@@ -390,7 +369,7 @@ setup_script_permissions() {
     cd "$INSTALL_DIR/$HOOK_REPO_NAME"
     
     print_info "设置mineadmin.sh脚本执行权限..."
-    chmod +x docker/mineadmin.sh
+    chmod +x mineadmin.sh
     
     if [[ $? -eq 0 ]]; then
         print_success "脚本权限设置成功"
@@ -409,13 +388,13 @@ install_global_command() {
     print_info "执行mineadmin.sh setup命令..."
     
     # 执行setup命令
-    if ./docker/mineadmin.sh setup; then
+    if ./mineadmin.sh setup; then
         print_success "全局命令安装成功"
     else
         print_error "全局命令安装失败"
         echo -e "${YELLOW}请手动执行:${NC}"
         echo "  cd $INSTALL_DIR/$HOOK_REPO_NAME"
-        echo "  ./docker/mineadmin.sh setup"
+        echo "  ./mineadmin.sh setup"
         exit 1
     fi
 }
