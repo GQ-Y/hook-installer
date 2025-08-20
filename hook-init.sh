@@ -342,8 +342,25 @@ clone_hook_repository() {
     cd "$HOOK_REPO_NAME"
     
     # 检查mineadmin.sh脚本是否存在
-    if [[ -f "docker/mineadmin.sh" ]]; then
+    if [[ -f "mineadmin.sh" ]]; then
         print_success "找到mineadmin.sh脚本"
+        
+        # 创建docker目录（如果不存在）
+        if [[ ! -d "docker" ]]; then
+            print_info "创建docker目录..."
+            mkdir -p docker
+        fi
+        
+        # 移动mineadmin.sh到docker目录
+        print_info "移动mineadmin.sh到docker目录..."
+        mv mineadmin.sh docker/
+        
+        if [[ $? -eq 0 ]]; then
+            print_success "mineadmin.sh已移动到docker目录"
+        else
+            print_error "移动mineadmin.sh失败"
+            exit 1
+        fi
     else
         print_error "未找到mineadmin.sh脚本"
         echo -e "${YELLOW}请检查仓库结构是否正确${NC}"
