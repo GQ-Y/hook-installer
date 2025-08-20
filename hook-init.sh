@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 # 仓库信息
 HOOK_REPO_URL="https://github.com/GQ-Y/hook-mine-mangen.git"
 HOOK_REPO_NAME="docker"
-INSTALL_DIR="/opt/docker"
+INSTALL_DIR="/opt/miniadmin"
 
 # 打印函数
 print_info() {
